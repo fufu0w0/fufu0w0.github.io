@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="无竞争并发 加锁机制 确保关键部分代码对cpu的独占性 加锁后其他线程访问该资源时被阻塞">
+<meta name="keywords" content="笔记,java,并发,leetcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="同步与并发机制--Java实现">
+<meta property="og:url" content="http://yoursite.com/2020/02/27/concurrency-and-synchronization-java/index.html">
+<meta property="og:site_name" content="yunxin&#39;s blog">
+<meta property="og:description" content="无竞争并发 加锁机制 确保关键部分代码对cpu的独占性 加锁后其他线程访问该资源时被阻塞">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-02-29T13:30:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="同步与并发机制--Java实现">
+<meta name="twitter:description" content="无竞争并发 加锁机制 确保关键部分代码对cpu的独占性 加锁后其他线程访问该资源时被阻塞">
+
+<link rel="canonical" href="http://yoursite.com/2020/02/27/concurrency-and-synchronization-java/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>同步与并发机制--Java实现 | yunxin's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yunxin's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">simply record what I have learned</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/27/concurrency-and-synchronization-java/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fufu0w0">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yunxin's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          同步与并发机制--Java实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-27 16:11:20" itemprop="dateCreated datePublished" datetime="2020-02-27T16:11:20+08:00">2020-02-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-29 21:30:40" itemprop="dateModified" datetime="2020-02-29T21:30:40+08:00">2020-02-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="无竞争并发"><a href="#无竞争并发" class="headerlink" title="无竞争并发"></a>无竞争并发</h2><ul>
+<li>加锁机制</li>
+<li>确保关键部分代码对cpu的独占性</li>
+<li>加锁后其他线程访问该资源时被阻塞</li>
+</ul><a id="more"></a>
+<h3 id="synchronized机制"><a href="#synchronized机制" class="headerlink" title="synchronized机制"></a>synchronized机制</h3><ul>
+<li>悲观锁；</li>
+<li>JVM会为一个使用内部锁（synchronized）的对象维护两个集合，<code>Entry Set</code>锁池和<code>Wait Set</code>等待池；</li>
+<li>线程A占有该锁时，其他试图获得锁的线程进入<code>Entry Set</code>；</li>
+<li>若线程A调用被加锁对象的wait()方法，线程A释放锁，并进入 <code>Wait Set</code>；</li>
+<li>该锁被释放时，<code>Entry Set</code>中的一个线程获得该锁，进入 <code>Runable</code> 状态；</li>
+<li>当A调用被加锁对象的notify()方法时，<code>Wait Set</code> 中的一个线程被唤醒，进入<code>Entry Set</code>，和此时在<code>Entry Set</code>中的其他线程竞争该锁；</li>
+<li>当A调用被加锁对象的notifyall()方法时，<code>Wait Set</code> 中的所有线程被唤醒，进入<code>Entry Set</code>，和此时在<code>Entry Set</code>中的其他线程竞争该锁；</li>
+<li>拥有锁的线程，Thread.sleep()不会释放锁</li>
+<li>synchronized可以作用于代码块和方法</li>
+</ul>
+<p>下面是一些练习</p>
+<p><strong>注意</strong>在线程屏障类问题中，判断某线程是否需要wait()的条件应该是</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(condition)&#123;</span><br><span class="line">    lock.wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里只能是<code>while</code>而不能是<code>if</code>,因为<code>if</code>只判断一次，当它再次得到锁之后就不再判断这个条件时是否满足，直接进行下去了。而我们需要的是只有这个条件满足，它才能获得锁，继续进行下面的操作，所以这里只能是<code>while</code>的。</p>
+<p><strong>leetcode 1114</strong> wait and notify机制实现。有三个线程分别调用同一个Foo对象的first(),sencond(),third()方法，要求三个方法中的代码块顺序执行输出firstsecondthird</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">    Boolean finishFirst=<span class="keyword">false</span>,finishSecond=<span class="keyword">false</span>;</span><br><span class="line">    Object lock =<span class="keyword">new</span> Object();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">first</span><span class="params">(Runnable printFirst)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span>(lock) &#123;</span><br><span class="line">            <span class="comment">// printFirst.run() outputs "first".</span></span><br><span class="line">            printFirst.run();</span><br><span class="line">            finishFirst=<span class="keyword">true</span>;</span><br><span class="line">            lock.notifyAll();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">second</span><span class="params">(Runnable printSecond)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">            <span class="keyword">while</span>(finishFirst==<span class="keyword">false</span>)&#123;</span><br><span class="line">                lock.wait();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// printSecond.run() outputs "second".</span></span><br><span class="line">            printSecond.run();</span><br><span class="line">            finishSecond=<span class="keyword">true</span>;</span><br><span class="line">            lock.notifyAll();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">third</span><span class="params">(Runnable printThird)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">            <span class="keyword">while</span>(finishSecond==<span class="keyword">false</span>)&#123;</span><br><span class="line">                lock.wait();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// printThird.run() outputs "third".</span></span><br><span class="line">            printThird.run();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>leetcode 1115</strong>,要求交替输出foo和bar</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FooBar</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> n;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FooBar</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.n = n;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> f=<span class="number">0</span>;</span><br><span class="line">    Object lock=<span class="keyword">new</span> Object();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(Runnable printFoo)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="comment">// printFoo.run() outputs "foo". Do not change or remove this line.</span></span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">while</span>(f==<span class="number">1</span>)&#123;</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;</span><br><span class="line">                printFoo.run();</span><br><span class="line">                f=<span class="number">1</span>;</span><br><span class="line">                lock.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bar</span><span class="params">(Runnable printBar)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="comment">// printBar.run() outputs "bar". Do not change or remove this line.</span></span><br><span class="line">                <span class="keyword">while</span>(f==<span class="number">0</span>)&#123;</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;</span><br><span class="line">                printBar.run();</span><br><span class="line">                f=<span class="number">0</span>;</span><br><span class="line">                lock.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>leetcode 1116</strong>,交替打印0102030405060708到n</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.function.IntConsumer;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ZeroEvenOdd</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> n;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ZeroEvenOdd</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.n = n;</span><br><span class="line">    &#125;</span><br><span class="line">    Object lock=<span class="keyword">new</span> Object();</span><br><span class="line">    <span class="comment">// printNumber.accept(x) outputs "x", where x is an integer.</span></span><br><span class="line">    <span class="keyword">int</span> f=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> e=<span class="number">1</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">zero</span><span class="params">(IntConsumer printNumber)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">while</span>(f==<span class="number">1</span>)&#123;</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;</span><br><span class="line">                printNumber.accept(<span class="number">0</span>);</span><br><span class="line">                f=<span class="number">1</span>;</span><br><span class="line">                lock.notifyAll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">even</span><span class="params">(IntConsumer printNumber)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i+=<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock)&#123;</span><br><span class="line">                <span class="keyword">while</span>(f==<span class="number">0</span>||e==<span class="number">1</span>)&#123;</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;</span><br><span class="line">                printNumber.accept(i);</span><br><span class="line">                e=<span class="number">1</span>;</span><br><span class="line">                f=<span class="number">0</span>;</span><br><span class="line">                lock.notifyAll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">odd</span><span class="params">(IntConsumer printNumber)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i+=<span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">while</span>(f==<span class="number">0</span>||e==<span class="number">0</span>)&#123;</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;</span><br><span class="line">                printNumber.accept(i);</span><br><span class="line">                f=<span class="number">0</span>;</span><br><span class="line">                e=<span class="number">0</span>;</span><br><span class="line">                lock.notifyAll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>leetcode 1117</strong>，交替打印两个H和一个O，如果一个氧线程到达屏障时没有氢线程到达，它必须等候直到两个氢线程到达。</p>
+<p>如果一个氢线程到达屏障时没有其它线程到达，它必须等候直到一个氧线程和另一个氢线程到达</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">H2O</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">H2O</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    Object lock=<span class="keyword">new</span> Object();</span><br><span class="line">    <span class="keyword">int</span> H=<span class="number">0</span>,O=<span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hydrogen</span><span class="params">(Runnable releaseHydrogen)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">            <span class="keyword">while</span>(H==<span class="number">2</span>)&#123;</span><br><span class="line">                lock.wait();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// releaseHydrogen.run() outputs "H". Do not change or remove this line.</span></span><br><span class="line">            releaseHydrogen.run();</span><br><span class="line">            H++;</span><br><span class="line">            <span class="keyword">if</span>(H==<span class="number">2</span>&amp;&amp;O==<span class="number">1</span>)&#123;</span><br><span class="line">                H=<span class="number">0</span>;</span><br><span class="line">                O=<span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            lock.notifyAll();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">oxygen</span><span class="params">(Runnable releaseOxygen)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">            <span class="keyword">while</span>(O==<span class="number">1</span>)&#123;</span><br><span class="line">                lock.wait();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// releaseOxygen.run() outputs "O". Do not change or remove this line.</span></span><br><span class="line">            releaseOxygen.run();</span><br><span class="line">            O++;</span><br><span class="line">            <span class="keyword">if</span>(H==<span class="number">2</span>&amp;&amp;O==<span class="number">1</span>)&#123;</span><br><span class="line">                H=<span class="number">0</span>;</span><br><span class="line">                O=<span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            lock.notifyAll();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="信号量机制（semaphore）"><a href="#信号量机制（semaphore）" class="headerlink" title="信号量机制（semaphore）"></a>信号量机制（semaphore）</h3><ul>
+<li>信号量是一种控制线程对公共资源的访问的变量，可用于解决临界区问题；</li>
+<li>是一种无锁机制</li>
+<li>这种机制的实现基于CPU提供的原子操作<code>CAS</code>（compare and swap)，让信号量的值一定是原子的递增或递减；</li>
+</ul>
+<p>下面是一些练习。</p>
+<p><strong>leetcode 1114</strong> 信号量机制实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.Semaphore;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Semaphore finishFirst = <span class="keyword">new</span> Semaphore(<span class="number">0</span>);</span><br><span class="line">    Semaphore finishSecond = <span class="keyword">new</span> Semaphore(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">first</span><span class="params">(Runnable printFirst)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">// printFirst.run() outputs "first".</span></span><br><span class="line">        printFirst.run();</span><br><span class="line">        finishFirst.release();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">second</span><span class="params">(Runnable printSecond)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">// printSecond.run() outputs "second".</span></span><br><span class="line">        finishFirst.acquire();</span><br><span class="line">        printSecond.run();</span><br><span class="line">        finishSecond.release();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">third</span><span class="params">(Runnable printThird)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">// printThird.run() outputs "third".</span></span><br><span class="line">        finishSecond.acquire();</span><br><span class="line">        printThird.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>leetcode 1226</strong>，哲学家吃饭问题，建立一个保存每个位置的叉子数量的信号量数组，保存每个位置的叉子数，每次先拿起左边的叉子，若不能则让线程睡眠1ms然后重复这一过程，再拿起右边的叉子，若不能则放下左边的叉子，让线程睡1ms然后重复这一过程，直到可以同时拿起左右两只叉子，拿到后就吃面，然后跳出循环。这里在请求失败时若不使用Thread.sleep(1)会有两三个测试点超时，这是因为这个线程频繁的请求其他线程没有释放的资源而占用CPU，造成了资源浪费。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.Semaphore;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DiningPhilosophers</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> Semaphore[] forks=<span class="keyword">new</span> Semaphore[<span class="number">5</span>];</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DiningPhilosophers</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">            forks[i]=<span class="keyword">new</span> Semaphore(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// call the run() method of any runnable to execute its code</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">wantsToEat</span><span class="params">(<span class="keyword">int</span> philosopher,</span></span></span><br><span class="line"><span class="function"><span class="params">                           Runnable pickLeftFork,</span></span></span><br><span class="line"><span class="function"><span class="params">                           Runnable pickRightFork,</span></span></span><br><span class="line"><span class="function"><span class="params">                           Runnable eat,</span></span></span><br><span class="line"><span class="function"><span class="params">                           Runnable putLeftFork,</span></span></span><br><span class="line"><span class="function"><span class="params">                           Runnable putRightFork)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (forks[(philosopher + <span class="number">4</span>) % <span class="number">5</span>].tryAcquire()) &#123;</span><br><span class="line">                f = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (forks[philosopher].tryAcquire()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (f == <span class="number">1</span>) &#123;</span><br><span class="line">                    pickLeftFork.run();</span><br><span class="line">                    pickRightFork.run();</span><br><span class="line">                    eat.run();</span><br><span class="line">                    putLeftFork.run();</span><br><span class="line">                    forks[philosopher].release();</span><br><span class="line">                    putRightFork.run();</span><br><span class="line">                    forks[(philosopher + <span class="number">4</span>) % <span class="number">5</span>].release();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    forks[philosopher].release();</span><br><span class="line">                    Thread.sleep(<span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(f==<span class="number">1</span>)&#123;</span><br><span class="line">                    forks[(philosopher + <span class="number">4</span>) % <span class="number">5</span>].release();</span><br><span class="line">                    Thread.sleep(<span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="volatile关键字"><a href="#volatile关键字" class="headerlink" title="volatile关键字"></a>volatile关键字</h3><ul>
+<li>直接从内存中获取变量的值，而不是从从缓存中，可以保证内存可见性。</li>
+<li>加锁会影响效率，要保证效率的情况下可以使用volatile关键字</li>
+<li>当写一个volatile变量时,JVM会把该线程对应的本地内存中的共享变量刷新到主内存。</li>
+<li>当读一个volatile变量时,JVM会把该线程对应的本地内存置为无效</li>
+<li>是</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/笔记/" rel="tag"># 笔记</a>
+              <a href="/tags/java/" rel="tag"># java</a>
+              <a href="/tags/并发/" rel="tag"># 并发</a>
+              <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/02/19/PAT-1127-sollution/" rel="next" title="1064 Complete Binary Search Tree">
+                  <i class="fa fa-chevron-left"></i> 1064 Complete Binary Search Tree
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#无竞争并发"><span class="nav-number">1.</span> <span class="nav-text">无竞争并发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized机制"><span class="nav-number">1.1.</span> <span class="nav-text">synchronized机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号量机制（semaphore）"><span class="nav-number">1.2.</span> <span class="nav-text">信号量机制（semaphore）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile关键字"><span class="nav-number">1.3.</span> <span class="nav-text">volatile关键字</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="fufu0w0"
+    src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">fufu0w0</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fufu0w0</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
