@@ -51,14 +51,14 @@
 </script>
 
   <meta name="description" content="无竞争并发 加锁机制 确保关键部分代码对cpu的独占性 加锁后其他线程访问该资源时被阻塞">
-<meta name="keywords" content="笔记,java,并发,leetcode">
+<meta name="keywords" content="java,并发,笔记,leetcode">
 <meta property="og:type" content="article">
 <meta property="og:title" content="同步与并发机制--Java实现">
 <meta property="og:url" content="http://yoursite.com/2020/02/27/concurrency-and-synchronization-java/index.html">
 <meta property="og:site_name" content="yunxin&#39;s blog">
 <meta property="og:description" content="无竞争并发 加锁机制 确保关键部分代码对cpu的独占性 加锁后其他线程访问该资源时被阻塞">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-29T13:30:40.000Z">
+<meta property="og:updated_time" content="2020-05-14T06:05:24.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="同步与并发机制--Java实现">
 <meta name="twitter:description" content="无竞争并发 加锁机制 确保关键部分代码对cpu的独占性 加锁后其他线程访问该资源时被阻塞">
@@ -224,7 +224,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-02-29 21:30:40" itemprop="dateModified" datetime="2020-02-29T21:30:40+08:00">2020-02-29</time>
+                <time title="修改时间：2020-05-14 14:05:24" itemprop="dateModified" datetime="2020-05-14T14:05:24+08:00">2020-05-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,7 +254,19 @@
 <li>确保关键部分代码对cpu的独占性</li>
 <li>加锁后其他线程访问该资源时被阻塞</li>
 </ul><a id="more"></a>
-<h3 id="synchronized机制"><a href="#synchronized机制" class="headerlink" title="synchronized机制"></a>synchronized机制</h3><ul>
+<h3 id="synchronized机制"><a href="#synchronized机制" class="headerlink" title="synchronized机制"></a>synchronized机制</h3><p>对象锁：</p>
+<ul>
+<li>对当前对象加锁，若不同线程持有的锁不是同一对象，如果对线程对象中的实例方法或this加锁，这个锁就失效了。</li>
+<li>如果想让线程排队执行，让多个线程持有同一个对象，线程就会排队执行。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Object lock =<span class="keyword">new</span> Object()</span><br><span class="line"><span class="keyword">synchronized</span> (lock)&#123;</span><br><span class="line">    <span class="comment">//do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>类锁：</p>
+<ul>
+<li>对静态方法或类名.class加锁， 锁住的是当前类</li>
+<li>只要线程属于同一个类，那么就会只要一个对象占有类锁，其他类都会被锁住。</li>
+</ul>
+<p>例如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 利用5个线程并发执行，num数字累加计数到100000，并打印。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Count</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Count count = <span class="keyword">new</span> Count();</span><br><span class="line">        Thread[] threads=<span class="keyword">new</span> Thread[<span class="number">5</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">            threads[i]=<span class="keyword">new</span> Thread(count.new MyThread());</span><br><span class="line">            threads[i].start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">            threads[i].join();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(count.num);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        不能这样同步，这样加的锁是对象锁，只能锁住当前对象。</span></span><br><span class="line"><span class="comment">        private synchronized void increse() &#123;</span></span><br><span class="line"><span class="comment">            for (int i = 0; i &lt; 20000; i++) &#123;</span></span><br><span class="line"><span class="comment">                num++;</span></span><br><span class="line"><span class="comment">                //System.out.print(i+" ");</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">        &#125;*/</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20000</span>; i++) &#123;</span><br><span class="line">                    <span class="comment">//System.out.print(i+" ");</span></span><br><span class="line">                    <span class="keyword">synchronized</span> (Count.class) &#123;</span><br><span class="line">                        num++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
 <li>悲观锁；</li>
 <li>JVM会为一个使用内部锁（synchronized）的对象维护两个集合，<code>Entry Set</code>锁池和<code>Wait Set</code>等待池；</li>
 <li>线程A占有该锁时，其他试图获得锁的线程进入<code>Entry Set</code>；</li>
@@ -264,6 +276,7 @@
 <li>当A调用被加锁对象的notifyall()方法时，<code>Wait Set</code> 中的所有线程被唤醒，进入<code>Entry Set</code>，和此时在<code>Entry Set</code>中的其他线程竞争该锁；</li>
 <li>拥有锁的线程，Thread.sleep()不会释放锁</li>
 <li>synchronized可以作用于代码块和方法</li>
+<li>保证互斥，一次只执行一个临界段；和内存可见性。以牺牲性能为代价</li>
 </ul>
 <p>下面是一些练习</p>
 <p><strong>注意</strong>在线程屏障类问题中，判断某线程是否需要wait()的条件应该是</p>
@@ -291,9 +304,11 @@
 <h3 id="volatile关键字"><a href="#volatile关键字" class="headerlink" title="volatile关键字"></a>volatile关键字</h3><ul>
 <li>直接从内存中获取变量的值，而不是从从缓存中，可以保证内存可见性。</li>
 <li>加锁会影响效率，要保证效率的情况下可以使用volatile关键字</li>
+<li><code>happen-before</code>原则，对一个 <code>volatile</code> 变量的写操作先行发生于后面对这个变量的读操作，因此可以保证<code>指令重排序</code>是不会出现的</li>
 <li>当写一个volatile变量时,JVM会把该线程对应的本地内存中的共享变量刷新到主内存。</li>
 <li>当读一个volatile变量时,JVM会把该线程对应的本地内存置为无效</li>
-<li>是</li>
+<li>如果两个线程同时<strong>读写</strong>一个共享变量，那么仅使用<code>volatile</code>关键字是不够的,这时应该使用synchronized来保证读写的原子性。</li>
+<li>如果只有一个线程读写共享变量的值，其他的线程对这个变量只读，则可以使用<code>volatile</code>关键字</li>
 </ul>
 
     </div>
@@ -304,9 +319,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/笔记/" rel="tag"># 笔记</a>
               <a href="/tags/java/" rel="tag"># java</a>
               <a href="/tags/并发/" rel="tag"># 并发</a>
+              <a href="/tags/笔记/" rel="tag"># 笔记</a>
               <a href="/tags/leetcode/" rel="tag"># leetcode</a>
           </div>
 
@@ -322,6 +337,9 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/2020/05/14/code-craft-2020/" rel="prev" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -376,7 +394,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
