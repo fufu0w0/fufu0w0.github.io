@@ -143,7 +143,9 @@ mathjax: true
     $shr(shr^{-1}(A))=A$ 
   * 列混合mic (Mix-Columns)
     对当前状态数组每一列的元素做混合运算
+
     $mic(A)=[a'_{ij}]_{4\times4}$
+
     ![20200320125155.png](https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320125155.png)
     mic运算时可逆的
     $mic(mic^{-1}(A))=A$
