@@ -66,6 +66,8 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320125155.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200506102044.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200506100905.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200429112020.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200429112453.png">
 <meta property="og:updated_time" content="2020-06-01T14:34:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络安全的理论与实践">
@@ -251,216 +253,267 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>网络安全概论课程复习笔记。</p><h2 id="概论">概论</h2><h3 id="常见攻击手段">常见攻击手段</h3><a id="more"></a>
-
-
+        <p>网络安全概论课程复习笔记。</p><h2 id="概论"><a href="#概论" class="headerlink" title="概论"></a>概论</h2><h3 id="常见攻击手段"><a href="#常见攻击手段" class="headerlink" title="常见攻击手段"></a>常见攻击手段</h3><a id="more"></a>
 <ul>
-<li>窃听：网络数据包嗅探 解决途径：数据加密</li>
-<li>窃取登录密码
-<ul>
+<li>窃听：网络数据包嗅探<br>解决途径：数据加密</li>
+<li>窃取登录密码<ul>
 <li>密码猜测</li>
-<li>社交工程，用社交手段获取私密信息
-<ul>
+<li>社交工程，用社交手段获取私密信息<ul>
 <li>身份伪装</li>
 <li>钓鱼：伪造网站(称之为钓鱼网站)进行的攻击，最常见</li>
-</ul></li>
-<li>字典攻击：登录密码加密后存储在主机中，将密码密文和存储了密码的字典对碰
-<ul>
+</ul>
+</li>
+<li>字典攻击：登录密码加密后存储在主机中，将密码密文和存储了密码的字典对碰<ul>
 <li>构造彩虹表节省空间</li>
-</ul></li>
+</ul>
+</li>
 <li>密码嗅探</li>
-</ul></li>
-<li>身份诈骗
-<ul>
-<li>中间人攻击 解决途径：验证ip包 <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200311112018.png" alt="20200311112018.png"></li>
-<li>重放攻击：拦截一个合法的信息，经过一段时间后重新将此消息发给最初的接受者 解决途径：给每次发出的消息加上一个随机数或时间戳(timestamp)</li>
+</ul>
+</li>
+<li>身份诈骗<ul>
+<li>中间人攻击<br>解决途径：验证ip包<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200311112018.png" alt="20200311112018.png"></li>
+<li>重放攻击：拦截一个合法的信息，经过一段时间后重新将此消息发给最初的接受者<br>解决途径：给每次发出的消息加上一个随机数或时间戳(timestamp)</li>
 <li>网络诈骗</li>
 <li>软件剥削</li>
-</ul></li>
-<li>网络诈骗
-<ul>
+</ul>
+</li>
+<li>网络诈骗<ul>
 <li>ip诈骗是最常见的</li>
 <li>SYN洪水攻击</li>
 <li>TCP劫持</li>
-<li><code>ARP</code>诈骗
-<ul>
+<li><code>ARP</code>诈骗<ul>
 <li>address resolution protoco，将ip地址转为MAC地址</li>
-<li>篡改目的主机的APR表 <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200313110936.png" alt="20200313110936.png"></li>
-</ul></li>
-</ul></li>
-<li>缓冲区溢出的攻击 解决途径：进行语句检查并检查要写入缓冲区的内容的界限</li>
-<li>抵赖 解决途径：身份认证协议</li>
-<li>入侵：未授权用户进入他人计算机系统 解决途径：身份认证协议</li>
+<li>篡改目的主机的APR表<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200313110936.png" alt="20200313110936.png"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>缓冲区溢出的攻击<br>解决途径：进行语句检查并检查要写入缓冲区的内容的界限</li>
+<li>抵赖<br>解决途径：身份认证协议</li>
+<li>入侵：未授权用户进入他人计算机系统<br>解决途径：身份认证协议</li>
 <li>流量分析</li>
-<li>拒绝服务攻击<code>Denial of Service</code>
-<ul>
+<li>拒绝服务攻击<code>Denial of Service</code><ul>
 <li>Dos：由单台计算机发起攻击</li>
 <li>DDos：由多台计算机发起攻击</li>
-</ul></li>
-<li>恶意软件
-<ul>
+</ul>
+</li>
+<li>恶意软件<ul>
 <li>病毒</li>
 <li>蠕虫</li>
 <li>特洛伊木马</li>
 <li>逻辑炸弹</li>
 <li>后门程序</li>
 <li>间谍软件</li>
-</ul></li>
+</ul>
+</li>
 <li>逻辑炸弹：在程序内的子程序或指令，当一定的条件满足后，会触发执行</li>
 </ul>
-<h3 id="网络安全基本模型">网络安全基本模型</h3>
-<ul>
+<h3 id="网络安全基本模型"><a href="#网络安全基本模型" class="headerlink" title="网络安全基本模型"></a>网络安全基本模型</h3><ul>
 <li>密码系统</li>
 <li>防火墙</li>
 <li>抗恶意软件(AMS software)</li>
 <li>入侵检测系统 (IDS)</li>
 </ul>
-<h2 id="数据加密算法">数据加密算法</h2>
-<h3 id="加密算法设计要求">加密算法设计要求</h3>
-<ul>
-<li>高效
-<ul>
+<h2 id="数据加密算法"><a href="#数据加密算法" class="headerlink" title="数据加密算法"></a>数据加密算法</h2><h3 id="加密算法设计要求"><a href="#加密算法设计要求" class="headerlink" title="加密算法设计要求"></a>加密算法设计要求</h3><ul>
+<li>高效<ul>
 <li>时间复杂度在输入规模常数倍以内</li>
 <li>最简单的事异或运算加密，明文和密钥做异或运算后得到密文</li>
-</ul></li>
-<li>抵御统计分析
-<ul>
+</ul>
+</li>
+<li>抵御统计分析<ul>
 <li>扩散性，明文中每个比特影响密文中的多个比特，密文中的每个比特都由明文中的多个比特决定</li>
 <li>混淆性，密钥中每个比特影响密文中的多个比特，密文中的每个比特都由密钥中的多个比特决定</li>
-</ul></li>
+</ul>
+</li>
 <li>抵御穷举攻击</li>
 <li>抵御侧信道攻击（side channel attack, SCA）</li>
-<li>抵御数学攻击
-<ul>
+<li>抵御数学攻击<ul>
 <li>数学方法破译加密信息</li>
 <li>差分分析</li>
 <li>线性分析</li>
-</ul></li>
 </ul>
-<h3 id="数据加密标准des">数据加密标准DES</h3>
-<ul>
+</li>
+</ul>
+<h3 id="数据加密标准DES"><a href="#数据加密标准DES" class="headerlink" title="数据加密标准DES"></a>数据加密标准DES</h3><ul>
 <li>DES，Data Encryption Standard，是迭代的，对称的加密算法</li>
-<li>Feistel密码体系(FCS)的具体实施
-<ul>
+<li>Feistel密码体系(FCS)的具体实施<ul>
 <li>明文分为多个<code>2l</code>长的字符串,用替换和异或对每个字符串加密</li>
 <li>密钥<code>K</code>产生<code>n</code>个子密钥</li>
 <li><code>2l</code>的明文分为长度相同的<code>L0</code>和<code>R0</code>，经过<code>n</code>次替换和异或后的到这个<code>2l</code>的密文</li>
 <li>密文和明文等长</li>
-<li>解密和加密是对称的，输入密文和密钥，经过<code>n</code>轮替换和异或运算后得到解密后的明文 <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/FCSJIAMI.PNG" alt="FCSJIAMI.PNG"></li>
-</ul></li>
-<li>DES的替换函数<code>F</code>依赖于一组被称为S盒的特殊的矩阵
-<ul>
+<li>解密和加密是对称的，输入密文和密钥，经过<code>n</code>轮替换和异或运算后得到解密后的明文<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/FCSJIAMI.PNG" alt="FCSJIAMI.PNG"></li>
+</ul>
+</li>
+<li>DES的替换函数<code>F</code>依赖于一组被称为S盒的特殊的矩阵<ul>
 <li>48bit的字符串<code>Y</code>，</li>
 <li>按顺序分为8个6bit长的字符串，</li>
-<li>用8个4*16的<strong>互不相同</strong>的S盒转换为4bit字符串作为输出</li>
-</ul></li>
-<li>加密算法
-<ul>
+<li>用8个4<em>16的<em>*互不相同</em></em>的S盒转换为4bit字符串作为输出</li>
+</ul>
+</li>
+<li>加密算法<ul>
 <li>将32bit字符串通过扩展置换EP置换为48bit字符串</li>
-<li>将48bit字符串和密钥<span class="math inline">\(K_i\)</span>做异或</li>
+<li>将48bit字符串和密钥$K_i$做异或</li>
 <li>将该字符串输入S函数(就是上面的S盒)，得到32bit字符串</li>
 <li>将该字符串重新排列</li>
-<li>上述过程用公式表达如下 <span class="math inline">\(F(R_{i-1},K_i)=P(S(EP(R_{i-1})\bigotimes K_i))\)</span></li>
-</ul></li>
+<li>上述过程用公式表达如下<br>$F(R_{i-1},K_i)=P(S(EP(R_{i-1})\bigotimes K_i))$</li>
+</ul>
+</li>
 <li>安全强度取决于加密算法论述，密钥长度，替换函数构造</li>
 </ul>
-<h3 id="aes加密算法">AES加密算法</h3>
-<ul>
-<li>基本结构
-<ul>
+<h3 id="AES加密算法"><a href="#AES加密算法" class="headerlink" title="AES加密算法"></a>AES加密算法</h3><ul>
+<li>基本结构<ul>
 <li>AES，Advanced Encryption Standard，是迭代的，对称的加密算法</li>
-<li>以字节为单位，将明文分段，每段16字节，表示为4*4的<strong>状态矩阵</strong></li>
+<li>以字节为单位，将明文分段，每段16字节，表示为4<em>4的<em>*状态矩阵</em></em></li>
 <li>每轮加密算法有字节替换<code>sub</code>，行位移<code>shr</code>，列混合<code>mic</code>和子密钥相加<code>ark</code></li>
 <li>重复执行加密算法将明文状态矩阵转为密文状态矩阵</li>
 <li>密钥长度可以是16B,24B,32B，子密钥都是16B</li>
-</ul></li>
-<li>AES-128加密算法步骤
+</ul>
+</li>
+<li><p>AES-128加密算法步骤</p>
 <ul>
 <li>将密钥扩展为44个元素的数组W，每个元素是32bit字符串，将W分成11个128bit子密钥（32bit*44=128bit*11)，也就是将密钥扩展为11把16字节的子密钥</li>
-<li>子密钥的产生和字节替换都依赖同一S盒，S盒是16*16矩阵，每个元素都是1字节的二进制序列，是一一对应的置换
-<ul>
-<li>需要替换的字节w，一个字节8bit,i为前4bit的，j为后4bit,<span class="math inline">\(S(w)=s_{i,j}\)</span>,i，j属于[0,16)，<span class="math inline">\(s_{i,j}\)</span>是S盒中对应的元素 <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320110820.png" alt="20200320110820.png"></li>
-<li>w经过S盒再经过S逆盒后得到w,w经过S逆盒再经过S盒后得到w <span class="math inline">\(S(S^{-1}(w))=w\)</span> <span class="math inline">\(S^{-1}(S(w))=w\)</span></li>
+<li>子密钥的产生和字节替换都依赖同一S盒，S盒是16*16矩阵，每个元素都是1字节的二进制序列，是一一对应的置换<ul>
+<li>需要替换的字节w，一个字节8bit,i为前4bit的，j为后4bit,$S(w)=s_{i,j}$,i，j属于[0,16)，$s_{i,j}$是S盒中对应的元素<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320110820.png" alt="20200320110820.png"></li>
+<li>w经过S盒再经过S逆盒后得到w,w经过S逆盒再经过S盒后得到w<br>$S(S^{-1}(w))=w$<br>$S^{-1}(S(w))=w$</li>
 <li>S盒的构造用了加瓦罗域的乘法运算</li>
-</ul></li>
-<li>子密钥扩展
-<ul>
-<li>将16B的密钥扩展为每个元素4字节，共有44个元素的W数组，W[4i][4i+1][4i+2][4i+3]是第i个子密钥</li>
-<li>前4个字节是这个密钥自己，后面40个用前面4个来产生 <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320113126.png" alt="20200320113126.png"></li>
-<li>具体过程P58自己看</li>
-</ul></li>
-<li>子密钥相加ark (Add Round Keys) 将16字节的子密钥排列为4*4的矩阵<span class="math inline">\(K_i\)</span>，和当前的状态矩阵A按位异或 <span class="math inline">\(ark(A,K_i)=A\bigoplus K_i\)</span></li>
-<li>字节替换sub (Substitute-Bytes) 将当前状态矩阵A按位输入S盒进行替换 <span class="math inline">\(sub(S)=[S(a_{ij})]_{4\times4}\)</span></li>
-<li>行位移shr (Shift-Rows) 将A的第i行向左循环位移i-1次，逆运算是将A的第i行向右循环位移i-1次 shr运算是可逆的 <span class="math inline">\(shr(shr^{-1}(A))=A\)</span></li>
-<li><p>列混合mic (Mix-Columns) 对当前状态数组每一列的元素做混合运算</p>
-<p><span class="math inline">\(mic(A)=[a&#39;_{ij}]_{4\times4}\)</span></p>
-<p><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320125155.png" alt="20200320125155.png"> mic运算时可逆的 <span class="math inline">\(mic(mic^{-1}(A))=A\)</span></p></li>
-</ul></li>
 </ul>
-<h2 id="实用网络安全协议">实用网络安全协议</h2>
-<p>密码算法部署在网络不通层会提供不同的保护。</p>
+</li>
+<li>子密钥扩展<ul>
+<li>将16B的密钥扩展为每个元素4字节，共有44个元素的W数组，W[4i][4i+1][4i+2][4i+3]是第i个子密钥</li>
+<li>前4个字节是这个密钥自己，后面40个用前面4个来产生<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320113126.png" alt="20200320113126.png"></li>
+<li>具体过程P58自己看</li>
+</ul>
+</li>
+<li>子密钥相加ark (Add Round Keys)<br>将16字节的子密钥排列为4*4的矩阵$K_i$，和当前的状态矩阵A按位异或<br>$ark(A,K_i)=A\bigoplus K_i$</li>
+<li>字节替换sub (Substitute-Bytes)<br>将当前状态矩阵A按位输入S盒进行替换<br>$sub(S)=[S(a_{ij})]_{4\times4}$</li>
+<li>行位移shr (Shift-Rows)<br>将A的第i行向左循环位移i-1次，逆运算是将A的第i行向右循环位移i-1次<br>shr运算是可逆的<br>$shr(shr^{-1}(A))=A$ </li>
+<li><p>列混合mic (Mix-Columns)<br>对当前状态数组每一列的元素做混合运算</p>
+<p>$mic(A)=[a’_{ij}]_{4\times4}$</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320125155.png" alt="20200320125155.png"><br>mic运算时可逆的<br>$mic(mic^{-1}(A))=A$</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="实用网络安全协议"><a href="#实用网络安全协议" class="headerlink" title="实用网络安全协议"></a>实用网络安全协议</h2><p>密码算法部署在网络不通层会提供不同的保护。</p>
 <ul>
 <li>应用层：端到端加密，传输过程不解密</li>
 <li>传输层：封装数据的 tcp 包被加密，包括数据和首部，在传输过程中经过传输层时需要解密。</li>
 <li>网络层：tcp 包被加密，封装 tcp 包的 ip 包也可以在这里加密和认证，是链到链加密，原始 ip 包对 ip 层可见，分为隧道模式和传输模式两种。</li>
 </ul>
-<h3 id="传输层安全协议-sshtls">传输层安全协议 SSH/TLS</h3>
-<p>SSL：安全套接字层协议</p>
+<h3 id="传输层安全协议-SSH-TLS"><a href="#传输层安全协议-SSH-TLS" class="headerlink" title="传输层安全协议 SSH/TLS"></a>传输层安全协议 SSH/TLS</h3><p>SSL：安全套接字层协议</p>
 <blockquote>
 <p>The SSL record protocol is responsible for data encryption and integrity.</p>
 </blockquote>
 <p>结构</p>
 <ul>
-<li>SSL握手协议
-<ul>
+<li>SSL握手协议<ul>
 <li>session：客户端和服务器之间的关联，它定义了一组参数，如使用的算法、sessionId等。SSL会话由SSL握手协议创建。该协议允许在服务器和客户机之间建立的连接（conection）之间共享参数，用于避免为每个连接协商新参数。也就是说，客户机和服务器之间的多个SSL连接之间共享单个会话。</li>
-</ul></li>
-<li>SSL记录协议
-<ul>
+</ul>
+</li>
+<li>SSL记录协议<ul>
 <li>分段</li>
-<li>用SSL握手协议中确定的压缩函数，MAC算法，（Message Authentication Code） <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200506102044.png" alt="20200506102044"></li>
-</ul></li>
+<li>用SSL握手协议中确定的压缩函数，MAC算法，（Message Authentication Code）<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200506102044.png" alt="20200506102044"></li>
+</ul>
+</li>
 <li>SSL密码更换协议</li>
-<li>SSL提醒协议 <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200506100905.png" alt="20200506100905"></li>
+<li>SSL提醒协议<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200506100905.png" alt="20200506100905"></li>
 </ul>
 <p>TLS：传输层安全性协议</p>
-<h3 id="网络层安全协议标准">网络层安全协议标准</h3>
-<p>网络层安全协议标准是 ip 安全协议<code>IPsec</code>，是构造虚拟专用网络的主要工具。</p>
-<p>IPsec将 tcp 包加密 * 认证协议 * 认证头，Authentication Header，<code>AH</code> * 用于 ip 包的<strong>认证</strong> * 认证 ip 包来源，,using a shared secret key to create the message digest * 保证 ip 包数据完整性, using a message digest that is generated by an algorithm such as HMAC-MD5 or HMAC-SHA. * AH使用滑动窗口抵御消息重放攻击 * 加密协议 * 封装安全荷载，Encapsulating Security Payload，<code>ESP</code> * 规定加密格式，用于 ip 包的<strong>加密</strong>和<strong>认证</strong> * 密钥交换协议 * 互联网密钥交换，Internet Key Echange，<code>IKE</code> * 规定密钥交换格式，给通信双方设置密钥 * 安全关联机制 * 安全关联机制，<code>SA</code> * 要处理 IPsec 加密或认证的 IP 包，通信双方要建立一个安全连接。发送端选择加密算法和参数，要通知接收端用相同的加密算法和参数解密收到的网包 * 安全参数索引<code>SPI</code>，安全参数在安全关联数据库 (security associations database, SADB)中的索引 * 目标ip地址 * 安全标识符，AH 或 ESP</p>
-<p>对ip包加密主要是以下两种方式： * 隧道模式 <code>tunnel mode</code>，对整个 ip 包，包括 ip 包首部加密 * IPsec 将原始 ip 包用 AH 或 ESP 封装 * 用新的 ip 首部包装装封装后的ip包 * 单层隧道，网关G收到 ip 包，和发送这个 ip 包的网关建立安全连接 SA，解密该 ip 包，获取目标 ip 地址，在路由表中查询到下一跳的网关 ip，用这个 ip 作为新的 ip 包首部 * 多层隧道 * 接收端IPsec对收到的数据包解密</p>
-<pre><code>![20200429112020](https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200429112020.png)
-AH模式↑
-
-![20200429112453](https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200429112453.png)
-ESP模式↑</code></pre>
+<h3 id="网络层安全协议标准"><a href="#网络层安全协议标准" class="headerlink" title="网络层安全协议标准"></a>网络层安全协议标准</h3><p>网络层安全协议标准是 ip 安全协议<code>IPsec</code>，是构造虚拟专用网络的主要工具。</p>
+<p>IPsec将 tcp 包加密</p>
 <ul>
-<li>传输模式 <code>Transport mode</code>，不对 ip 包首部进行加密。在AH或ESP加密后，用原来的ip首部作为新的首部封装即可。</li>
+<li>认证协议<ul>
+<li>认证头，Authentication Header，<code>AH</code></li>
+<li>用于 ip 包的<strong>认证</strong></li>
+<li>认证 ip 包来源，,using a shared secret key to create the message digest</li>
+<li>保证 ip 包数据完整性, using a message digest that is generated by an algorithm such as HMAC-MD5 or HMAC-SHA.</li>
+<li>AH使用滑动窗口抵御消息重放攻击</li>
 </ul>
-<p>AH只用于认证，ESP可以用于加密，也可以用于认证。 ESP尾部包含认证，头部有序列号，原始ip包部分加密。</p>
-<h2 id="数据认证">数据认证</h2>
-<p>目的是 * 证明数据来自哪儿 * 证明数据未被篡改 * 维护数据完整性和不可否认性</p>
+</li>
+<li>加密协议<ul>
+<li>封装安全荷载，Encapsulating Security Payload，<code>ESP</code></li>
+<li>规定加密格式，用于 ip 包的<strong>加密</strong>和<strong>认证</strong></li>
+</ul>
+</li>
+<li>密钥交换协议<ul>
+<li>互联网密钥交换，Internet Key Echange，<code>IKE</code></li>
+<li>规定密钥交换格式，给通信双方设置密钥</li>
+</ul>
+</li>
+<li>安全关联机制<ul>
+<li>安全关联机制，<code>SA</code></li>
+<li>要处理 IPsec 加密或认证的 IP 包，通信双方要建立一个安全连接。发送端选择加密算法和参数，要通知接收端用相同的加密算法和参数解密收到的网包</li>
+<li>安全参数索引<code>SPI</code>，安全参数在安全关联数据库 (security associations database, SADB)中的索引</li>
+<li>目标ip地址</li>
+<li>安全标识符，AH 或 ESP</li>
+</ul>
+</li>
+</ul>
+<p>对ip包加密主要是以下两种方式：</p>
+<ul>
+<li><p>隧道模式 <code>tunnel mode</code>，对整个 ip 包，包括 ip 包首部加密</p>
+<ul>
+<li>IPsec 将原始 ip 包用 AH 或 ESP 封装</li>
+<li>用新的 ip 首部包装装封装后的ip包<ul>
+<li>单层隧道，网关G收到 ip 包，和发送这个 ip 包的网关建立安全连接 SA，解密该 ip 包，获取目标 ip 地址，在路由表中查询到下一跳的网关 ip，用这个 ip 作为新的 ip 包首部</li>
+<li>多层隧道</li>
+</ul>
+</li>
+<li>接收端IPsec对收到的数据包解密</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200429112020.png" alt="20200429112020"><br>AH模式↑</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200429112453.png" alt="20200429112453"><br>ESP模式↑</p>
+</li>
+<li><p>传输模式 <code>Transport mode</code>，不对 ip 包首部进行加密。在AH或ESP加密后，用原来的ip首部作为新的首部封装即可。</p>
+</li>
+</ul>
+<p>AH只用于认证，ESP可以用于加密，也可以用于认证。<br>ESP尾部包含认证，头部有序列号，原始ip包部分加密。</p>
+<h2 id="数据认证"><a href="#数据认证" class="headerlink" title="数据认证"></a>数据认证</h2><p>目的是</p>
+<ul>
+<li>证明数据来自哪儿</li>
+<li>证明数据未被篡改</li>
+<li>维护数据完整性和不可否认性</li>
+</ul>
 <p>明文较长时，加密算法耗费大，因此在实际中一般从明文生成一个较短的字符串加密，有使用密钥和不使用密钥两种生成方式</p>
 <ul>
 <li>使用密钥生成的短代表，叫做<strong>数字签名</strong></li>
 <li>不用密钥生成的短代表，叫做<strong>消息认证码</strong></li>
 </ul>
-<h3 id="散列函数">散列函数</h3>
-<p>要求： * 单项性 * 计算唯一性 * 无碰撞性 * 强无碰撞性</p>
-<p>标准安全散列函数有 * SHA * SHA-512 * SHA-3标准 * 旋涡散列函数</p>
-<h3 id="消息认证码">消息认证码</h3>
-<p>消息认证码，Message authentication code，<code>MCN</code>，也叫<strong>密码校验和</strong>，一般用常规加密算法产生密码校验和来做数据认证。</p>
+<h3 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h3><p>要求：</p>
+<ul>
+<li>单项性</li>
+<li>计算唯一性<ul>
+<li>无碰撞性</li>
+<li>强无碰撞性</li>
+</ul>
+</li>
+</ul>
+<p>标准安全散列函数有</p>
+<ul>
+<li>SHA<ul>
+<li>SHA-512</li>
+<li>SHA-3标准</li>
+</ul>
+</li>
+<li>旋涡散列函数</li>
+</ul>
+<h3 id="消息认证码"><a href="#消息认证码" class="headerlink" title="消息认证码"></a>消息认证码</h3><p>消息认证码，Message authentication code，<code>MCN</code>，也叫<strong>密码校验和</strong>，一般用常规加密算法产生密码校验和来做数据认证。</p>
 <p><strong>异或密码校验和</strong></p>
-<p><span class="math inline">\(M=M_1M_2...M_k\)</span>是明文，<span class="math inline">\(M_i\)</span>是128bit二进制字符串，E是AES-128加密算法，K是密钥</p>
-<p><span class="math inline">\(H_{\bigoplus}(M)=M_1\bigoplus M_2\bigoplus ...\bigoplus M_k\)</span></p>
-<p><span class="math inline">\(MCN(M)=E(K,H_{\bigoplus}(M))\)</span></p>
+<p>$M=M_1M_2…M_k$是明文，$M_i$是128bit二进制字符串，E是AES-128加密算法，K是密钥</p>
+<p>$H_{\bigoplus}(M)=M_1\bigoplus M_2\bigoplus …\bigoplus M_k$</p>
+<p>$MCN(M)=E(K,H_{\bigoplus}(M))$</p>
 <p>也就是说，消息验证码是用加密算法加密明文按位异或运算得到的。</p>
-<p>甲将明文和MCN发给乙，乙用K将MCN解密得到<span class="math inline">\(H_{\bigoplus}(M)\)</span>,然后用M计算<span class="math inline">\(H_{\bigoplus}(M)\)</span>，若一致，则可以证明M没有被篡改过。</p>
-<p>攻击者可以构造M'，若可以使得<span class="math inline">\(H_{\bigoplus}(M&#39;)\)</span>和<span class="math inline">\(H_{\bigoplus}(M)\)</span>一样，就可以将假消息M'伪造为甲发送的明文M</p>
+<p>甲将明文和MCN发给乙，乙用K将MCN解密得到$H_{\bigoplus}(M)$,然后用M计算$H_{\bigoplus}(M)$，若一致，则可以证明M没有被篡改过。</p>
+<p>攻击者可以构造M’，若可以使得$H_{\bigoplus}(M’)$和$H_{\bigoplus}(M)$一样，就可以将假消息M’伪造为甲发送的明文M</p>
 <p><strong>数据认证码</strong></p>
 <p>不常用</p>
 <p><strong>密码散列消息认证码</strong></p>
 <p>密码散列消息认证码，HMCN，将密钥信息融入明文，再用散列函数计算散列值，散列函数不同 ，HMCN算法不同</p>
-<p>破坏的方法： * 生日攻击 * 集相交攻击</p>
+<p>破坏的方法：</p>
+<ul>
+<li>生日攻击</li>
+<li>集相交攻击</li>
+</ul>
 <p><strong>数字签名标准</strong></p>
 <p>数字签名标准DSS</p>
 <p>加密生成ra sa,用公钥明文和sa计算v，若v和ra相同，则说明消息未被篡改。</p>
@@ -530,7 +583,7 @@ ESP模式↑</code></pre>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概论"><span class="nav-number">1.</span> <span class="nav-text">概论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见攻击手段"><span class="nav-number">1.1.</span> <span class="nav-text">常见攻击手段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络安全基本模型"><span class="nav-number">1.2.</span> <span class="nav-text">网络安全基本模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据加密算法"><span class="nav-number">2.</span> <span class="nav-text">数据加密算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加密算法设计要求"><span class="nav-number">2.1.</span> <span class="nav-text">加密算法设计要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据加密标准des"><span class="nav-number">2.2.</span> <span class="nav-text">数据加密标准DES</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aes加密算法"><span class="nav-number">2.3.</span> <span class="nav-text">AES加密算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实用网络安全协议"><span class="nav-number">3.</span> <span class="nav-text">实用网络安全协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#传输层安全协议-sshtls"><span class="nav-number">3.1.</span> <span class="nav-text">传输层安全协议 SSH/TLS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络层安全协议标准"><span class="nav-number">3.2.</span> <span class="nav-text">网络层安全协议标准</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据认证"><span class="nav-number">4.</span> <span class="nav-text">数据认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#散列函数"><span class="nav-number">4.1.</span> <span class="nav-text">散列函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息认证码"><span class="nav-number">4.2.</span> <span class="nav-text">消息认证码</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概论"><span class="nav-number">1.</span> <span class="nav-text">概论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见攻击手段"><span class="nav-number">1.1.</span> <span class="nav-text">常见攻击手段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络安全基本模型"><span class="nav-number">1.2.</span> <span class="nav-text">网络安全基本模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据加密算法"><span class="nav-number">2.</span> <span class="nav-text">数据加密算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加密算法设计要求"><span class="nav-number">2.1.</span> <span class="nav-text">加密算法设计要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据加密标准DES"><span class="nav-number">2.2.</span> <span class="nav-text">数据加密标准DES</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AES加密算法"><span class="nav-number">2.3.</span> <span class="nav-text">AES加密算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实用网络安全协议"><span class="nav-number">3.</span> <span class="nav-text">实用网络安全协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#传输层安全协议-SSH-TLS"><span class="nav-number">3.1.</span> <span class="nav-text">传输层安全协议 SSH/TLS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络层安全协议标准"><span class="nav-number">3.2.</span> <span class="nav-text">网络层安全协议标准</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据认证"><span class="nav-number">4.</span> <span class="nav-text">数据认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#散列函数"><span class="nav-number">4.1.</span> <span class="nav-text">散列函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息认证码"><span class="nav-number">4.2.</span> <span class="nav-text">消息认证码</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
