@@ -1,6 +1,7 @@
 ---
 title: 同步与并发机制--Java实现
 date: 2020-2-27 16:11:20
+updated: 2020-2-27 16:11:20
 categories: 
 - 多线程
 tags: 
@@ -18,6 +19,69 @@ tags:
 
 ### synchronized机制
 
+对象锁：
+
+* 对当前对象加锁，若不同线程持有的锁不是同一对象，如果对线程对象中的实例方法或this加锁，这个锁就失效了。
+* 如果想让线程排队执行，让多个线程持有同一个对象，线程就会排队执行。
+```java
+Object lock =new Object()
+synchronized (lock){
+    //do something
+}
+```
+
+类锁：
+
+* 对静态方法或类名.class加锁， 锁住的是当前类
+* 只要线程属于同一个类，那么就会只要一个对象占有类锁，其他类都会被锁住。
+
+例如
+```java
+
+/**
+ * 利用5个线程并发执行，num数字累加计数到100000，并打印。
+ */
+public class Count {
+    private int num = 0;
+
+    public static void main(String[] args) throws InterruptedException {
+        Count count = new Count();
+        Thread[] threads=new Thread[5];
+        for(int i=0;i<5;i++){
+            threads[i]=new Thread(count.new MyThread());
+            threads[i].start();
+        }
+        for(int i=0;i<5;i++){
+            threads[i].join();
+        }
+        System.out.println(count.num);
+
+    }
+
+    class MyThread implements Runnable {
+        /*
+        不能这样同步，这样加的锁是对象锁，只能锁住当前对象。
+        private synchronized void increse() {
+            for (int i = 0; i < 20000; i++) {
+                num++;
+                //System.out.print(i+" ");
+            }
+        }*/
+        @Override
+        public void run() {
+                for (int i = 0; i < 20000; i++) {
+                    //System.out.print(i+" ");
+                    synchronized (Count.class) {
+                        num++;
+                    }
+                }
+        }
+    }
+}
+```
+
+
+
 * 悲观锁；
 * JVM会为一个使用内部锁（synchronized）的对象维护两个集合，`Entry Set`锁池和`Wait Set`等待池；
 * 线程A占有该锁时，其他试图获得锁的线程进入`Entry Set`；
@@ -27,7 +91,8 @@ tags:
 * 当A调用被加锁对象的notifyall()方法时，`Wait Set` 中的所有线程被唤醒，进入`Entry Set`，和此时在`Entry Set`中的其他线程竞争该锁；
 * 拥有锁的线程，Thread.sleep()不会释放锁
 * synchronized可以作用于代码块和方法
-  
+* 保证互斥，一次只执行一个临界段；和内存可见性。以牺牲性能为代价
+
 下面是一些练习
 
 **注意**在线程屏障类问题中，判断某线程是否需要wait()的条件应该是
@@ -314,6 +379,8 @@ class DiningPhilosophers {
 
 * 直接从内存中获取变量的值，而不是从从缓存中，可以保证内存可见性。
 * 加锁会影响效率，要保证效率的情况下可以使用volatile关键字
+* `happen-before`原则，对一个 `volatile` 变量的写操作先行发生于后面对这个变量的读操作，因此可以保证`指令重排序`是不会出现的
 * 当写一个volatile变量时,JVM会把该线程对应的本地内存中的共享变量刷新到主内存。
 * 当读一个volatile变量时,JVM会把该线程对应的本地内存置为无效
-* 是
+* 如果两个线程同时**读写**一个共享变量，那么仅使用`volatile`关键字是不够的,这时应该使用synchronized来保证读写的原子性。
+* 如果只有一个线程读写共享变量的值，其他的线程对这个变量只读，则可以使用`volatile`关键字
