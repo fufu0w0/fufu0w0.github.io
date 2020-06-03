@@ -369,7 +369,8 @@
 <li>密钥长度可以是16B,24B,32B，子密钥都是16B</li>
 </ul>
 </li>
-<li>AES-128加密算法步骤<ul>
+<li><p>AES-128加密算法步骤</p>
+<ul>
 <li>将密钥扩展为44个元素的数组W，每个元素是32bit字符串，将W分成11个128bit子密钥（32bit*44=128bit*11)，也就是将密钥扩展为11把16字节的子密钥</li>
 <li>子密钥的产生和字节替换都依赖同一S盒，S盒是16*16矩阵，每个元素都是1字节的二进制序列，是一一对应的置换<ul>
 <li>需要替换的字节w，一个字节8bit,i为前4bit的，j为后4bit,$S(w)=s<em>{i,j}$,i，j属于[0,16)，$s</em>{i,j}$是S盒中对应的元素<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320110820.png" alt="20200320110820.png"></li>
@@ -386,7 +387,10 @@
 <li>子密钥相加ark (Add Round Keys)<br>将16字节的子密钥排列为4*4的矩阵$K_i$，和当前的状态矩阵A按位异或<br>$ark(A,K_i)=A\bigoplus K_i$</li>
 <li>字节替换sub (Substitute-Bytes)<br>将当前状态矩阵A按位输入S盒进行替换<br>$sub(S)=[S(a<em>{ij})]</em>{4\times4}$</li>
 <li>行位移shr (Shift-Rows)<br>将A的第i行向左循环位移i-1次，逆运算是将A的第i行向右循环位移i-1次<br>shr运算是可逆的<br>$shr(shr^{-1}(A))=A$ </li>
-<li>列混合mic (Mix-Columns)<br>对当前状态数组每一列的元素做混合运算<br>$mic(A)=[a’<em>{ij}]</em>{4\times4}$<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320125155.png" alt="20200320125155.png"><br>mic运算时可逆的<br>$mic(mic^{-1}(A))=A$</li>
+<li><p>列混合mic (Mix-Columns)<br>对当前状态数组每一列的元素做混合运算</p>
+<p>$mic(A)=[a’<em>{ij}]</em>{4\times4}$</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200320125155.png" alt="20200320125155.png"><br>mic运算时可逆的<br>$mic(mic^{-1}(A))=A$</p>
+</li>
 </ul>
 </li>
 </ul>
