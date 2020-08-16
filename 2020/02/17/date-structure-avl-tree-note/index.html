@@ -51,7 +51,7 @@
 </script>
 
   <meta name="description" content="预备知识高度：从叶子到当前节点的最长路径，根的高度就是树的高度，叶子高度为0">
-<meta name="keywords" content="笔记,avl树,数据结构">
+<meta name="keywords" content="avl树,笔记,数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据结构复习笔记-AVL树">
 <meta property="og:url" content="http://yoursite.com/2020/02/17/date-structure-avl-tree-note/index.html">
@@ -247,27 +247,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="预备知识">预备知识</h2><p><code>高度</code>：从叶子到当前节点的最长路径，根的高度就是树的高度，叶子高度为0</p><a id="more"></a>
-
+        <h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p><code>高度</code>：从叶子到当前节点的最长路径，根的高度就是树的高度，叶子高度为0</p><a id="more"></a>
 <p><code>深度</code>：从根到当前节点的路径长，根的深度为0</p>
-<h2 id="递推式">递推式</h2>
-<p>高度为h的<code>AVL树</code>，至少包含<span class="math inline">\(S(h)=fib(h+3)-1\)</span>个节点。因此可以得到递推式</p>
-<p><span class="math display">\[
+<h2 id="递推式"><a href="#递推式" class="headerlink" title="递推式"></a>递推式</h2><p>高度为h的<code>AVL树</code>，至少包含$S(h)=fib(h+3)-1$个节点。因此可以得到递推式</p>
+<script type="math/tex; mode=display">
 \begin{aligned}
 S(h) =fib(h+3)-1\\
 S(h-1)=fib(h+2)-1\\
 S(h-2)=fib(h+1)-1\\
 S(h)=S(h-1)+S(h-2)+1\\
-\end{aligned}
-\]</span></p>
-<p>有<span class="math inline">\(N\)</span>个节点的AVL树，查询的时间复杂度为<span class="math inline">\(O(logN)\)</span></p>
-<h2 id="平衡">平衡</h2>
-<p><code>平衡因子</code>：节点左右子树的高度之差（左子树高度-右子树高度）</p>
+\end{aligned}</script><p>有$N$个节点的AVL树，查询的时间复杂度为$O(logN)$</p>
+<h2 id="平衡"><a href="#平衡" class="headerlink" title="平衡"></a>平衡</h2><p><code>平衡因子</code>：节点左右子树的高度之差（左子树高度-右子树高度）</p>
 <p><code>平衡</code>：各节点的平衡因子都是 0, -1 或 1</p>
 <p><code>删除</code>：在节点删除时，<strong>至多</strong>只有一个节点失衡</p>
-<p><code>插入</code>：在节点插入时，<strong>至多</strong>引起<span class="math inline">\(logN\)</span>个节点失衡</p>
-<h2 id="插入">插入</h2>
-<p>插入节点<code>x</code>到节点<code>v</code>之后，若同时有多个节点失衡，最低者不会低于<code>x</code>的祖父。</p>
+<p><code>插入</code>：在节点插入时，<strong>至多</strong>引起$logN$个节点失衡</p>
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><p>插入节点<code>x</code>到节点<code>v</code>之后，若同时有多个节点失衡，最低者不会低于<code>x</code>的祖父。</p>
 <p><code>左旋</code>(zag)：</p>
 <ul>
 <li>失衡节点右侧子树太高</li>
@@ -283,24 +277,25 @@ S(h)=S(h-1)+S(h-2)+1\\
 <p><code>单旋</code>：</p>
 <ul>
 <li>三代节点<code>g</code>,<code>p</code>,<code>v</code>方向一致</li>
-<li>在左侧插入，方向一致向左的情况称为<code>zig-zig</code> (失衡节点的左孩子的值大于插入节点的值，插入的节点在失衡节点左孩子的左侧) <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200218001636.png" alt="20200218001636.png"></li>
-<li>在右侧插入，方向一致向右的情况称为<code>zag-zag</code> (失衡节点的右孩子的值小于插入节点的值，插入的节点在失衡节点右孩子的右侧) <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200218001742.png" alt="20200218001742.png"></li>
+<li>在左侧插入，方向一致向左的情况称为<code>zig-zig</code> (失衡节点的左孩子的值大于插入节点的值，插入的节点在失衡节点左孩子的左侧)<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200218001636.png" alt="20200218001636.png"></li>
+<li>在右侧插入，方向一致向右的情况称为<code>zag-zag</code> (失衡节点的右孩子的值小于插入节点的值，插入的节点在失衡节点右孩子的右侧)<br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200218001742.png" alt="20200218001742.png"></li>
 <li>因为方向一致，在旋转后会保持BST当前节点大于左侧节点小于右侧节点要求</li>
 <li>一次右旋或者左旋，最低的失衡节点恢复平衡，其上所有失衡节点也恢复平衡，全树恢复平衡</li>
-<li><p>只涉及常数个节点，时间复杂度<span class="math inline">\(O(1)\)</span> <code>双旋</code>：</p></li>
-<li>三代节点<code>g</code>,<code>p</code>,<code>v</code>方向不一致</li>
-<li>在左侧插入，失衡节点的左孩子小于插入节点，插入节点在失衡节点左孩子的右侧，先对失衡节点的左孩子左旋，然后再对失衡节点右旋，这称为<code>zig-zag</code> <img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200218002614.png" alt="20200218002614.png"></li>
+<li><p>只涉及常数个节点，时间复杂度$O(1)$<br><code>双旋</code>：</p>
+</li>
+<li><p>三代节点<code>g</code>,<code>p</code>,<code>v</code>方向不一致</p>
+</li>
+<li>在左侧插入，失衡节点的左孩子小于插入节点，插入节点在失衡节点左孩子的右侧，先对失衡节点的左孩子左旋，然后再对失衡节点右旋，这称为<code>zig-zag</code><br><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200218002614.png" alt="20200218002614.png"></li>
 <li>在右侧插入，失衡节点的右孩子大于插入节点，插入节点在失衡节点右孩子的左侧，先对失衡节点的右孩子右旋，然后再对失衡节点左旋，这称为<code>zag-zig</code><img src="https://cdn.jsdelivr.net/gh/fufu0w0/myblogpic/20200218002412.png" alt="20200218002412.png"></li>
 <li>在这种情况下，若只进行一次左旋或右旋将会破坏二叉搜索树左侧节点小于右侧节点的特性，因此要先对左孩子进行左旋操作或右孩子进行右旋操作。</li>
-<li><p>只涉及常数个节点，时间复杂度<span class="math inline">\(O(1)\)</span></p></li>
+<li>只涉及常数个节点，时间复杂度$O(1)$</li>
 </ul>
 <p>如果不理解可以在草稿本上画个图。</p>
 <p>插入操作的代码实现如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">node* <span class="title">insert</span><span class="params">(node *root, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        root = <span class="keyword">new</span> node;</span><br><span class="line">        root-&gt;v = value;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(value&lt;root-&gt;v)&#123;</span><br><span class="line">        root-&gt;l = insert(root-&gt;l, value);</span><br><span class="line">        <span class="keyword">if</span>(getHeight(root-&gt;l)-getHeight(root-&gt;r)&gt;<span class="number">1</span>||getHeight(root-&gt;l)-getHeight(root-&gt;r)&lt;<span class="number">-1</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(root-&gt;l-&gt;v&gt;value)&#123;<span class="comment">//zig-zig</span></span><br><span class="line">                root=rightRotate(root);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                root-&gt;l = leftRotate(root-&gt;l);<span class="comment">//zag-zig</span></span><br><span class="line">                root = rightRotate(root);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        root-&gt;r=insert(root-&gt;r, value);</span><br><span class="line">        <span class="keyword">if</span>(getHeight(root-&gt;l)-getHeight(root-&gt;r)&gt;<span class="number">1</span>||getHeight(root-&gt;l)-getHeight(root-&gt;r)&lt;<span class="number">-1</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(root-&gt;r-&gt;v&lt;value)&#123;<span class="comment">//zag-zag</span></span><br><span class="line">                root=leftRotate(root);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                root-&gt;r = rightRotate(root-&gt;r);<span class="comment">//zig-zag</span></span><br><span class="line">                root = leftRotate(root);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;<span class="comment">//返回子树的根</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>没写完，删除等有时间再写。</p>
-<h2 id="参考">参考</h2>
-<p><a href="https://book.douban.com/subject/25859528/" target="_blank" rel="noopener">《数据结构(C++语言版)》 邓俊辉</a></p>
-<p><a href="https://pintia.cn/problem-sets/994805342720868352/problems/994805404939173888" target="_blank" rel="noopener">PAT 1166 Root of AVL Tree (30分)</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://book.douban.com/subject/25859528/" target="_blank" rel="noopener">《数据结构(C++语言版)》 邓俊辉</a></p>
+<p><a href="https://pintia.cn/problem-sets/994805342720868352/problems/994805404939173888" target="_blank" rel="noopener">PAT 1166 Root of AVL Tree  (30分)</a></p>
 <p><a href="https://pintia.cn/problem-sets/994805342720868352/problems/994805351302414336" target="_blank" rel="noopener">PAT 1123 Is It a Complete AVL Tree (30分)</a></p>
 
     </div>
@@ -311,8 +306,8 @@ S(h)=S(h-1)+S(h-2)+1\\
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/笔记/" rel="tag"># 笔记</a>
               <a href="/tags/avl树/" rel="tag"># avl树</a>
+              <a href="/tags/笔记/" rel="tag"># 笔记</a>
               <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
           </div>
 
@@ -385,7 +380,7 @@ S(h)=S(h-1)+S(h-2)+1\\
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -394,7 +389,7 @@ S(h)=S(h-1)+S(h-2)+1\\
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
